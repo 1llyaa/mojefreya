@@ -15,3 +15,7 @@ node_modules/
 ## Release files
 release
 *.zip
+
+# Shopify AI toolkit, installed per-machine (30MB of vendored skills)
+.agents/
+.claude/

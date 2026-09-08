@@ -1,0 +1,104 @@
+{% doc %}
+  Renders the fixed bottom purchase bar: current price, compare-at price and a
+  submit button wired to the fold's product form.
+
+  The button sits outside that form and reaches it through the HTML `form`
+  attribute, so the page carries one product form rather than two.
+
+  @param {string} form_id - The id of the product form this button submits
+  @param {object} variant - The variant whose price and availability are shown
+
+  @example
+  {% render 'sticky-buy-bar', form_id: 'fold-buy', variant: product.selected_or_first_available_variant %}
+{% enddoc %}
+
+<div class="sticky-buy">
+  <div class="sticky-buy__inner">
+    <div class="sticky-buy__price">
+      <span class="sticky-buy__price-current">
+        <span class="visually-hidden">{{ 'product.price_current' | t }}</span>
+        {{ variant.price | money_without_trailing_zeros }}
+      </span>
+      {% if variant.compare_at_price > variant.price %}
+        <s class="sticky-buy__price-compare">
+          <span class="visually-hidden">{{ 'product.price_compare' | t }}</span>
+          {{ variant.compare_at_price | money_without_trailing_zeros }}
+        </s>
+      {% endif %}
+    </div>
+
+    <button
+      type="submit"
+      form="{{ form_id }}"
+      class="button sticky-buy__cta"
+      {% unless variant.available %}disabled{% endunless %}
+    >
+      {% if variant.available %}
+        {{ 'product.buy' | t }}
+      {% else %}
+        {{ 'product.sold_out' | t }}
+      {% endif %}
+    </button>
+  </div>
+</div>
+
+{% stylesheet %}
+  .sticky-buy {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 20;
+    box-sizing: border-box;
+    padding: 10px var(--page-margin);
+    padding-block-end: max(10px, env(safe-area-inset-bottom));
+    background-color: var(--color-background);
+    box-shadow: var(--elevation-2);
+  }
+
+  .sticky-buy__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: var(--layout-max);
+    margin-inline: auto;
+  }
+
+  .sticky-buy__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sticky-buy__price-current {
+    font-size: var(--font-size-lead);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .sticky-buy__price-compare {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-micro);
+  }
+
+  .sticky-buy__cta {
+    flex: 1;
+    max-width: 60%;
+    font-size: var(--font-size-body);
+  }
+
+  /* The sticky bar exists because the mobile fold scrolls the CTA away.
+     On desktop the fold CTA stays in view, so the bar is redundant chrome. */
+  @media (min-width: 750px) {
+    .sticky-buy {
+      display: none;
+    }
+  }
+
+  .sticky-buy__cta[disabled] {
+    background-color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+{% endstylesheet %}

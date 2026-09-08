@@ -8,15 +8,13 @@
  * ------------------------------------------------------------
  */
 {
-  "type": "header",
-  "name": "t:general.header",
   "sections": {
-    "header": {
-      "type": "header",
+    "main": {
+      "type": "legal-page",
       "settings": {}
     }
   },
   "order": [
-    "header"
+    "main"
   ]
 }

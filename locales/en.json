@@ -15,9 +15,17 @@
   },
   "cart": {
     "checkout": "Checkout",
+    "continue": "Back to shopping",
+    "empty": "Your cart is empty.",
+    "quantity": "Quantity",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "taxes_note": "Shipping and taxes are calculated at checkout.",
     "title": "Cart",
-    "update": "Update",
-    "remove": "Remove"
+    "update": "Update"
+  },
+  "collections": {
+    "title": "Collections"
   },
   "customers": {
     "login": {
@@ -27,8 +35,14 @@
       "title": "Login"
     }
   },
-  "collections": {
-    "title": "Collections"
+  "footer": {
+    "cookie_preferences": "Cookie preferences",
+    "legal": "Legal information"
+  },
+  "gallery": {
+    "label": "Product gallery",
+    "choose": "Choose an image",
+    "go_to": "Show image {{ index }}"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -37,10 +51,33 @@
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout"
   },
+  "guarantee": {
+    "accepted": "We accept"
+  },
+  "header": {
+    "cart": "Cart",
+    "cart_count": {
+      "one": "{{ count }} item in cart",
+      "other": "{{ count }} items in cart"
+    }
+  },
   "password": {
     "title": "This shop is private",
     "password": "Password",
     "enter": "Enter"
+  },
+  "product": {
+    "add_to_cart": "Add to cart",
+    "buy": "Buy now",
+    "price_compare": "Original price",
+    "price_current": "Current price",
+    "rating_aria": "Rated {{ rating }} out of 5",
+    "review_count": {
+      "one": "({{ count }} review)",
+      "other": "({{ count }} reviews)"
+    },
+    "savings": "Save {{ amount }}",
+    "sold_out": "Sold out"
   },
   "search": {
     "title": "Search",

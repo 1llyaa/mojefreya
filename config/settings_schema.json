@@ -8,6 +8,16 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "t:general.brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "t:labels.logo"
+      }
+    ]
+  },
+  {
     "name": "t:general.typography",
     "settings": [
       {
@@ -15,10 +25,8 @@
         "content": "t:general.fonts"
       },
       {
-        "type": "font_picker",
-        "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "type": "paragraph",
+        "content": "t:info.fonts_selfhosted"
       }
     ]
   },
@@ -59,24 +67,78 @@
       {
         "type": "color",
         "id": "background_color",
+        "default": "#FAF6F1",
+        "label": "t:labels.background",
+        "info": "t:info.background"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
         "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "label": "t:labels.surface"
+      },
+      {
+        "type": "color",
+        "id": "color_surface_alt",
+        "default": "#F2EAE1",
+        "label": "t:labels.surface_alt",
+        "info": "t:info.surface_alt"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#2E2A27",
         "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "default": "#5F564F",
+        "label": "t:labels.text_secondary"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "default": "#A62B4D",
+        "label": "t:labels.accent",
+        "info": "t:info.accent"
+      },
+      {
+        "type": "color",
+        "id": "color_on_accent",
+        "default": "#FFFFFF",
+        "label": "t:labels.on_accent"
       },
       {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
-        "max": 10,
+        "max": 16,
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
-        "default": 4
+        "default": 10
+      }
+    ]
+  },
+  {
+    "name": "t:general.commerce_facts",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:info.commerce_facts"
+      },
+      {
+        "type": "text",
+        "id": "fact_shipping_returns",
+        "default": "Doprava 99 Kč · 60 dní na vrácení",
+        "label": "t:labels.fact_shipping_returns"
+      },
+      {
+        "type": "text",
+        "id": "fact_payment",
+        "default": "Platba kartou i na dobírku",
+        "label": "t:labels.fact_payment"
       }
     ]
   }

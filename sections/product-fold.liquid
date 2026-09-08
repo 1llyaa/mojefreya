@@ -1,0 +1,324 @@
+{% liquid
+  assign target = product
+  if section.settings.featured_product != blank
+    assign target = section.settings.featured_product
+  endif
+
+  assign variant = target.selected_or_first_available_variant
+  assign on_sale = false
+  if variant.compare_at_price > variant.price
+    assign on_sale = true
+    assign savings = variant.compare_at_price | minus: variant.price
+  endif
+
+  comment
+    Both values arrive from theme editor settings, which merchants bind to a
+    product metafield with the editor's dynamic source connector. That keeps the
+    theme independent of whatever the metafields happen to be named.
+
+    A dynamic source hands us a string, so coerce before comparing. A "Rating"
+    metafield may arrive as an object carrying a rating property; accept that
+    too, then fall back to parsing the leading number out of the text.
+  endcomment
+  assign rating_raw = section.settings.review_rating
+  if rating_raw.rating
+    assign rating_raw = rating_raw.rating
+  endif
+
+  assign review_rating = rating_raw | replace: ',', '.' | times: 1.0
+  assign review_count = section.settings.review_count | times: 1
+
+  assign show_reviews = false
+  if review_count >= 5
+    if review_rating >= 4.0
+      assign show_reviews = true
+    endif
+  endif
+%}
+
+<div class="fold">
+  <div class="fold__intro">
+    <h1 class="fold__heading">
+      {% if section.settings.heading != blank %}
+        {{ section.settings.heading }}
+      {% else %}
+        {{ target.title }}
+      {% endif %}
+    </h1>
+
+    {% if section.settings.subheading != blank %}
+      <p class="fold__subheading">{{ section.settings.subheading }}</p>
+    {% endif %}
+
+    {% if show_reviews %}
+      {% capture rating_display %}{{ review_rating | replace: '.', ',' }}{% endcapture %}
+      <div class="fold__reviews">
+        <span class="fold__stars" aria-hidden="true">★★★★★</span>
+        <span class="fold__rating">{{ rating_display }}</span>
+        <span class="fold__review-count">{{ 'product.review_count' | t: count: review_count }}</span>
+        <span class="visually-hidden">{{ 'product.rating_aria' | t: rating: rating_display }}</span>
+      </div>
+    {% endif %}
+  </div>
+
+  {% render 'product-gallery', product: target %}
+
+  <div class="fold__buy">
+    <div class="fold__price">
+      <span class="fold__price-current">
+        <span class="visually-hidden">{{ 'product.price_current' | t }}</span>
+        {{ variant.price | money_without_trailing_zeros }}
+      </span>
+
+      {% if on_sale %}
+        <s class="fold__price-compare">
+          <span class="visually-hidden">{{ 'product.price_compare' | t }}</span>
+          {{ variant.compare_at_price | money_without_trailing_zeros }}
+        </s>
+        {%- capture savings_display -%}{{ savings | money_without_trailing_zeros }}{%- endcapture -%}
+        <span class="fold__savings">{{ 'product.savings' | t: amount: savings_display }}</span>
+      {% endif %}
+    </div>
+
+    {% if settings.fact_shipping_returns != blank %}
+      <p class="fold__fact">{{ settings.fact_shipping_returns }}</p>
+    {% endif %}
+
+    {% form 'product', target, id: 'fold-buy' %}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <input type="hidden" name="return_to" value="/checkout">
+      <button type="submit" class="button button--full fold__cta" {% unless variant.available %}disabled{% endunless %}>
+        {% if variant.available %}
+          {{ 'product.add_to_cart' | t }}
+        {% else %}
+          {{ 'product.sold_out' | t }}
+        {% endif %}
+      </button>
+    {% endform %}
+
+    {% if settings.fact_payment != blank %}
+      <p class="fold__fact fold__fact--center">{{ settings.fact_payment }}</p>
+    {% endif %}
+
+    {% if section.settings.show_description %}
+      {% if target.description != blank %}
+        <div class="fold__description rte">{{ target.description }}</div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+{% render 'sticky-buy-bar', form_id: 'fold-buy', variant: variant %}
+
+{% stylesheet %}
+  .fold {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: var(--layout-max);
+    margin-inline: auto;
+    padding-block: 24px 16px;
+  }
+
+  .fold__intro,
+  .fold__buy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .fold__description {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+    line-height: 1.55;
+  }
+
+  .fold__description > :first-child {
+    margin-block-start: 0;
+  }
+
+  .fold__description > :last-child {
+    margin-block-end: 0;
+  }
+
+  .fold__heading {
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+  }
+
+  .fold__subheading {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .fold__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fold__price-current {
+    font-size: var(--font-size-h2);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .fold__price-compare {
+    color: var(--color-text-muted);
+  }
+
+  .fold__savings {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+    font-weight: 600;
+  }
+
+  .fold__reviews {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .fold__stars {
+    letter-spacing: 0.08em;
+  }
+
+  .fold__rating {
+    font-weight: 600;
+  }
+
+  .fold__review-count {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+  }
+
+  .fold__fact {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+  }
+
+  .fold__fact--center {
+    text-align: center;
+  }
+
+  .fold__buy .shopify-product-form {
+    display: contents;
+  }
+
+  .fold__cta {
+    min-height: 52px;
+    letter-spacing: -0.01em;
+  }
+
+  .fold__cta[disabled] {
+    background-color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  /**
+   * Desktop derivation. The single mobile column exists so the photo is cropped
+   * by the fold as a scroll cue; on a wide screen there is no fold to crop
+   * against, so the photo moves alongside the copy and shows in full.
+   */
+  @media (min-width: 750px) {
+    .fold {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas:
+        "intro   gallery"
+        "buy     gallery"
+        ".       gallery";
+      grid-template-rows: auto auto 1fr;
+      column-gap: 48px;
+      row-gap: 12px;
+      padding-block: 48px 40px;
+    }
+
+    .fold__intro {
+      grid-area: intro;
+      max-width: var(--measure);
+    }
+
+    .fold__buy {
+      grid-area: buy;
+      max-width: var(--measure);
+    }
+
+    .gallery {
+      grid-area: gallery;
+      align-self: start;
+      position: sticky;
+      top: 24px;
+    }
+
+    .fold__heading {
+      font-size: clamp(2rem, 3.4vw, 2.75rem);
+    }
+
+    .fold__cta {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.fold",
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "t:labels.featured_product",
+      "info": "t:info.featured_product"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "info": "t:info.fold_heading",
+      "default": "Trvale hladká pokožka bez holení"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:labels.subheading",
+      "default": "Domácí IPL epilátor. Bezbolestně."
+    },
+    {
+      "type": "header",
+      "content": "t:general.reviews"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:info.reviews_guard"
+    },
+    {
+      "type": "text",
+      "id": "review_rating",
+      "label": "t:labels.review_rating",
+      "info": "t:info.review_rating"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "t:labels.review_count",
+      "info": "t:info.review_count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:labels.show_description",
+      "info": "t:info.show_description",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:general.fold" }]
+}
+{% endschema %}

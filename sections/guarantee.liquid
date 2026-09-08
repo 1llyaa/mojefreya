@@ -1,0 +1,106 @@
+<div class="band band--surface guarantee full-width">
+  <div class="band__inner">
+    <div class="guarantee__card">
+      <div class="guarantee__promise">
+        <div class="guarantee__mark" aria-hidden="true"></div>
+        <div>
+          <p class="guarantee__title">{{ section.settings.title }}</p>
+          <p class="guarantee__body">{{ section.settings.body }}</p>
+        </div>
+      </div>
+
+      {% if section.settings.show_payment_icons %}
+        {% if shop.enabled_payment_types.size > 0 %}
+          <div class="guarantee__payments">
+            <span class="guarantee__payments-label">{{ 'guarantee.accepted' | t }}</span>
+            {% for type in shop.enabled_payment_types %}
+              {{ type | payment_type_svg_tag: class: 'guarantee__payment-icon' }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .guarantee {
+    padding-block: 0 32px;
+  }
+
+  .guarantee .band__inner {
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 750px) {
+    .guarantee {
+      padding-block: 0 56px;
+    }
+  }
+
+  .guarantee__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background-color: var(--color-background);
+  }
+
+  .guarantee__promise {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .guarantee__mark {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-surface-alt) 78%, var(--color-foreground) 8%);
+  }
+
+  .guarantee__title {
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+
+  .guarantee__body {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+  }
+
+  .guarantee__payments {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-block-start: 12px;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .guarantee__payments-label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+  }
+
+  .guarantee__payment-icon {
+    width: 34px;
+    height: 22px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.guarantee",
+  "settings": [
+    { "type": "text", "id": "title", "label": "t:labels.title", "default": "60 dní na vrácení" },
+    { "type": "text", "id": "body", "label": "t:labels.body", "default": "Nesedne? Pošlete zpět a vrátíme peníze." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "t:labels.show_payment_icons", "default": true }
+  ],
+  "presets": [{ "name": "t:general.guarantee" }]
+}
+{% endschema %}

@@ -1,57 +1,105 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
-
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
+<div class="band band--inverse site-footer full-width">
+  <div class="band__inner site-footer__inner">
+    {% if section.settings.menu != blank %}
+      <nav class="site-footer__links" aria-label="{{ 'footer.legal' | t }}">
+        {% for link in section.settings.menu.links %}
+          <a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
     {% endif %}
+
+    {% if section.settings.show_cookie_preferences %}
+      <button type="button" class="site-footer__link site-footer__prefs" hidden>
+        {{ 'footer.cookie_preferences' | t }}
+      </button>
+    {% endif %}
+
+    {% if section.settings.operator != blank %}
+      <p class="site-footer__operator">{{ section.settings.operator }}</p>
+    {% endif %}
+
+    <p class="site-footer__copyright">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+    </p>
   </div>
-</footer>
+</div>
 
 {% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+  .site-footer {
+    padding-block: 32px;
+    font-size: var(--font-size-micro);
   }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
+
+  .site-footer__inner {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+
+  .site-footer__link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .site-footer__prefs {
+    align-self: flex-start;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .site-footer__operator,
+  .site-footer__copyright {
+    margin: 0;
+    color: color-mix(in srgb, currentcolor 78%, transparent);
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const button = document.querySelector('.site-footer__prefs');
+    if (!button) return;
+
+    const open = () => window.Shopify?.customerPrivacy?.showPreferences();
+
+    const reveal = () => {
+      if (!window.Shopify?.customerPrivacy?.showPreferences) return;
+      button.hidden = false;
+      button.addEventListener('click', open);
+    };
+
+    if (window.Shopify?.customerPrivacy) {
+      reveal();
+    } else {
+      window.Shopify?.loadFeatures?.(
+        [{ name: 'consent-tracking-api', version: '0.1' }],
+        (error) => {
+          if (!error) reveal();
+        }
+      );
+    }
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
   "name": "t:general.footer",
   "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
-    }
+    { "type": "link_list", "id": "menu", "label": "t:labels.menu", "info": "t:info.footer_menu" },
+    { "type": "checkbox", "id": "show_cookie_preferences", "label": "t:labels.show_cookie_preferences", "info": "t:info.show_cookie_preferences", "default": true },
+    { "type": "text", "id": "operator", "label": "t:labels.operator", "info": "t:info.operator", "default": "Provozovatel: [firma], IČO [xxx], [adresa], [e-mail]" }
   ]
 }
 {% endschema %}

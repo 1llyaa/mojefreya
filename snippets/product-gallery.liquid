@@ -1,0 +1,222 @@
+{% doc %}
+  Renders a square, swipeable product gallery with position dots overlaid on the
+  image.
+
+  Scrolling is native CSS scroll-snap, so swipe, trackpad and keyboard all work
+  before any JavaScript runs. The script only keeps the dots in sync and makes
+  them clickable; without it the gallery still scrolls, it just cannot jump.
+
+  Falls back to a single static image when the product has only one, and renders
+  nothing when it has none.
+
+  @param {object} product - The product whose images are shown
+
+  @example
+  {% render 'product-gallery', product: product %}
+{% enddoc %}
+
+{% liquid
+  assign images = product.images
+  assign image_count = images | size
+%}
+
+{% if image_count > 0 %}
+  <product-gallery
+    class="gallery"
+    {% if image_count > 1 %}data-multiple{% endif %}
+  >
+    <div
+      class="gallery__track"
+      role="region"
+      aria-label="{{ 'gallery.label' | t }}"
+      tabindex="0"
+    >
+      {% for image in images %}
+        <div class="gallery__slide" data-index="{{ forloop.index0 }}">
+          {%- liquid
+            assign alt = image.alt | default: product.title
+            assign loading = 'lazy'
+            assign priority = 'auto'
+            if forloop.first
+              assign loading = 'eager'
+              assign priority = 'high'
+            endif
+          -%}
+          {{
+            image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'gallery__image',
+              alt: alt,
+              widths: '390, 585, 780, 1000, 1200',
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              loading: loading,
+              fetchpriority: priority
+          }}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if image_count > 1 %}
+      <div class="gallery__dots" role="tablist" aria-label="{{ 'gallery.choose' | t }}">
+        {% for image in images %}
+          <button
+            class="gallery__dot"
+            type="button"
+            role="tab"
+            data-index="{{ forloop.index0 }}"
+            aria-label="{{ 'gallery.go_to' | t: index: forloop.index }}"
+            {% if forloop.first %}
+              aria-selected="true"
+            {% else %}
+              aria-selected="false"
+            {% endif %}
+          ></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </product-gallery>
+{% endif %}
+
+{% stylesheet %}
+  .gallery {
+    position: relative;
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--color-surface-alt);
+  }
+
+  .gallery__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gallery__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__track:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+
+  .gallery__slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .gallery__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+  }
+
+  .gallery__dots {
+    position: absolute;
+    inset-block-end: 12px;
+    inset-inline: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 10px;
+    width: fit-content;
+    margin-inline: auto;
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-background) 72%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .gallery__dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    cursor: pointer;
+    transition: background-color 150ms ease-out, transform 150ms ease-out;
+  }
+
+  .gallery__dot[aria-selected="true"] {
+    background-color: var(--color-foreground);
+    transform: scale(1.25);
+  }
+
+  /* The dot is 8px, but the hit area has to clear the 24px minimum. */
+  .gallery__dot::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin: -8px;
+  }
+
+  .gallery__dot:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__dot {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class ProductGallery extends HTMLElement {
+    connectedCallback() {
+      this.track = this.querySelector('.gallery__track');
+      this.dots = Array.from(this.querySelectorAll('.gallery__dot'));
+      if (!this.track || this.dots.length === 0) return;
+
+      this.slides = Array.from(this.querySelectorAll('.gallery__slide'));
+
+      this.dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const slide = this.slides[Number(dot.dataset.index)];
+          if (!slide) return;
+          this.track.scrollTo({
+            left: slide.offsetLeft - this.track.offsetLeft,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+              ? 'auto'
+              : 'smooth',
+          });
+        });
+      });
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            this.select(Number(entry.target.dataset.index));
+          });
+        },
+        { root: this.track, threshold: 0.6 }
+      );
+
+      this.slides.forEach((slide) => this.observer.observe(slide));
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+
+    select(index) {
+      this.dots.forEach((dot) => {
+        dot.setAttribute('aria-selected', String(Number(dot.dataset.index) === index));
+      });
+    }
+  }
+
+  if (!customElements.get('product-gallery')) {
+    customElements.define('product-gallery', ProductGallery);
+  }
+{% endjavascript %}

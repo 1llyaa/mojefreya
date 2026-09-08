@@ -1,0 +1,93 @@
+{
+  "404": {
+    "title": "404",
+    "not_found": "Stránka nenalezena.",
+    "back_to_shopping": "Zpět na nákup"
+  },
+  "blog": {
+    "article_comments": "Komentáře",
+    "article_metadata_html": "{{ date }} od {{ author }}",
+    "comment_form_body": "Komentář",
+    "comment_form_email": "E-mail",
+    "comment_form_name": "Jméno",
+    "comment_form_submit": "Odeslat",
+    "comment_form_title": "Přidat komentář"
+  },
+  "cart": {
+    "checkout": "Pokladna",
+    "continue": "Zpět na nákup",
+    "empty": "Váš košík je prázdný.",
+    "quantity": "Množství",
+    "remove": "Odebrat",
+    "subtotal": "Mezisoučet",
+    "taxes_note": "Doprava a daně se spočítají v pokladně.",
+    "title": "Košík",
+    "update": "Aktualizovat"
+  },
+  "collections": {
+    "title": "Kolekce"
+  },
+  "customers": {
+    "login": {
+      "email": "E-mail",
+      "password": "Heslo",
+      "submit": "Přihlásit se",
+      "title": "Přihlášení"
+    }
+  },
+  "footer": {
+    "cookie_preferences": "Nastavení cookies",
+    "legal": "Právní informace"
+  },
+  "gallery": {
+    "label": "Galerie produktu",
+    "choose": "Vybrat obrázek",
+    "go_to": "Zobrazit obrázek {{ index }}"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Přidat do Apple Wallet",
+    "card": "Dárkový poukaz",
+    "expired": "Platnost tohoto dárkového poukazu vypršela",
+    "expires_on": "Platnost do {{ expires_on }}",
+    "use_at_checkout": "Poukaz uplatníte v pokladně"
+  },
+  "guarantee": {
+    "accepted": "Přijímáme"
+  },
+  "header": {
+    "cart": "Košík",
+    "cart_count": {
+      "one": "{{ count }} položka v košíku",
+      "few": "{{ count }} položky v košíku",
+      "many": "{{ count }} položky v košíku",
+      "other": "{{ count }} položek v košíku"
+    }
+  },
+  "password": {
+    "title": "Tento obchod je soukromý",
+    "password": "Heslo",
+    "enter": "Vstoupit"
+  },
+  "product": {
+    "add_to_cart": "Přidat do košíku",
+    "buy": "Do košíku",
+    "price_compare": "Původní cena",
+    "price_current": "Aktuální cena",
+    "rating_aria": "Hodnocení {{ rating }} z 5",
+    "review_count": {
+      "one": "({{ count }} recenze)",
+      "few": "({{ count }} recenze)",
+      "many": "({{ count }} recenze)",
+      "other": "({{ count }} recenzí)"
+    },
+    "savings": "Ušetříte {{ amount }}",
+    "sold_out": "Vyprodáno"
+  },
+  "search": {
+    "title": "Vyhledávání",
+    "placeholder": "Hledejte články, stránky nebo produkty",
+    "submit": "Hledat",
+    "no_results_html": "Pro {{ terms }} jsme nic nenašli",
+    "results_for_html": "Počet výsledků pro {{ terms }}: {{ count }}"
+  }
+}

@@ -1,0 +1,87 @@
+{% doc %}
+  Restyles Shopify's native cookie consent banner to match the theme.
+
+  Shopify renders the banner into the light DOM (no shadow root) and injects its
+  own <style> element at runtime, after this one. Because that stylesheet lands
+  later in the document, equal-specificity rules would lose the cascade, so the
+  declarations here are marked important. That is deliberate, and the narrowest
+  tool available: the banner exposes no CSS custom properties and no styling API.
+
+  The class hooks below are read from Shopify's shipped storefront-banner.js.
+  They are not a documented contract, so treat this file as cosmetic only: if
+  Shopify restyles the banner these rules stop applying and the banner falls
+  back to the colours set in Settings > Customer privacy. Consent itself is
+  never affected.
+
+  @example
+  {% render 'consent-banner-styles' %}
+{% enddoc %}
+
+{% stylesheet %}
+  #shopify-pc__banner,
+  #shopify-pc__prefs {
+    font-family: var(--font-body--family) !important;
+  }
+
+  #shopify-pc__banner .shopify-pc__banner__dialog,
+  #shopify-pc__prefs .shopify-pc__prefs__dialog {
+    border-radius: 8px !important;
+    background: var(--color-surface) !important;
+    color: var(--color-foreground) !important;
+    box-shadow: var(--elevation-2) !important;
+  }
+
+  #shopify-pc__banner .shopify-pc__banner__body-title,
+  #shopify-pc__prefs .shopify-pc__prefs__header-title {
+    font-family: var(--font-display--family) !important;
+    font-size: var(--font-size-h2) !important;
+    font-weight: 400 !important;
+    line-height: var(--line-height-h2) !important;
+    color: var(--color-foreground) !important;
+  }
+
+  #shopify-pc__banner .shopify-pc__banner__body {
+    font-size: var(--font-size-micro) !important;
+    line-height: 1.5 !important;
+    color: var(--color-text-secondary) !important;
+  }
+
+  #shopify-pc__banner .shopify-pc__banner__body-policy-link {
+    color: var(--color-text-secondary) !important;
+    text-underline-offset: 2px !important;
+  }
+
+  #shopify-pc__banner button,
+  #shopify-pc__prefs button {
+    min-height: 44px !important;
+    border-radius: var(--button-radius) !important;
+    font-family: var(--font-body--family) !important;
+    font-size: var(--font-size-body) !important;
+    font-weight: 600 !important;
+  }
+
+  /* Accept is the single accented control here, mirroring the rule that the
+     accent colour is spent on one action per view. */
+  #shopify-pc__banner .shopify-pc__banner__btn-accept,
+  #shopify-pc__prefs .shopify-pc__prefs__header-accept,
+  #shopify-pc__prefs .shopify-pc__prefs__header-save {
+    border: none !important;
+    background: var(--color-accent) !important;
+    color: var(--color-on-accent) !important;
+    box-shadow: var(--elevation-1) !important;
+  }
+
+  #shopify-pc__banner .shopify-pc__banner__btn-decline,
+  #shopify-pc__banner .shopify-pc__banner__btn-manage-prefs,
+  #shopify-pc__prefs .shopify-pc__prefs__header-decline {
+    border: 1px solid var(--color-text-muted) !important;
+    background: transparent !important;
+    color: var(--color-foreground) !important;
+  }
+
+  #shopify-pc__banner :focus-visible,
+  #shopify-pc__prefs :focus-visible {
+    outline: 2px solid var(--color-accent) !important;
+    outline-offset: 2px !important;
+  }
+{% endstylesheet %}

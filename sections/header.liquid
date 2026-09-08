@@ -1,59 +1,108 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% if section.settings.show_topbar %}
+  {% if settings.fact_shipping_returns != blank %}
+    <div class="topbar full-width">
+      <p class="topbar__fact">{{ settings.fact_shipping_returns }}</p>
+    </div>
+  {% endif %}
+{% endif %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
+<header class="header full-width">
+  <div class="header__inner">
+    <a class="header__wordmark" href="{{ routes.root_url }}">
+      {% if settings.logo %}
+        {{
+          settings.logo
+          | image_url: height: 48
+          | image_tag: alt: shop.name, class: 'header__logo', loading: 'eager'
+        }}
+      {% else %}
+        {{ shop.name }}
       {% endif %}
+    </a>
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
+    <a class="header__cart" href="{{ routes.cart_url }}">
+      <span>{{ 'header.cart' | t }}</span>
+      <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+      <span class="visually-hidden">{{ 'header.cart_count' | t: count: cart.item_count }}</span>
     </a>
   </div>
 </header>
 
 {% stylesheet %}
-  header {
-    height: 5rem;
+  .topbar {
+    box-sizing: border-box;
+    background-color: var(--color-foreground);
+    padding: 4px var(--page-margin);
+  }
+
+  .topbar__fact {
+    margin: 0;
+    color: var(--color-on-inverse);
+    font-size: var(--font-size-micro);
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .header {
+    box-sizing: border-box;
+    background-color: var(--color-background);
+    border-block-end: 1px solid var(--color-border);
+    padding: 12px var(--page-margin);
+  }
+
+  .header__inner {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
+    max-width: var(--layout-max);
+    margin-inline: auto;
+    min-height: 24px;
   }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
+
+  .header__wordmark {
     display: flex;
     align-items: center;
-    justify-content: center;
+    font-family: var(--font-display--family);
+    font-size: var(--font-size-h2);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-foreground);
+    text-decoration: none;
   }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+
+  .header__logo {
+    display: block;
+    width: auto;
+    height: 24px;
   }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+
+  .header__cart {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-body);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .header__cart-count {
+    box-sizing: border-box;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 12px;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    font-size: var(--font-size-micro);
+    font-weight: 600;
+    line-height: 24px;
+    text-align: center;
   }
 {% endstylesheet %}
 
@@ -62,15 +111,11 @@
   "name": "t:general.header",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "type": "checkbox",
+      "id": "show_topbar",
+      "label": "t:labels.show_topbar",
+      "info": "t:info.show_topbar",
+      "default": true
     }
   ]
 }

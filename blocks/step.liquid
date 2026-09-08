@@ -1,0 +1,56 @@
+<div class="step" {{ block.shopify_attributes }}>
+  <span class="step__number" aria-hidden="true"></span>
+  <div>
+    <p class="step__title">{{ block.settings.title }}</p>
+    <p class="step__body">{{ block.settings.body }}</p>
+  </div>
+</div>
+
+{% stylesheet %}
+  .step {
+    display: flex;
+    gap: 16px;
+    counter-increment: step;
+  }
+
+  .step__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+    font-size: var(--font-size-micro);
+    font-weight: 600;
+  }
+
+  .step__number::before {
+    content: counter(step);
+  }
+
+  .step__title {
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+
+  .step__body {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+    line-height: 1.45;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.step",
+  "settings": [
+    { "type": "text", "id": "title", "label": "t:labels.title", "default": "Oholit" },
+    { "type": "text", "id": "body", "label": "t:labels.body", "default": "Pokožku před aplikací oholte, světlo se lépe dostane ke kořínkům." }
+  ],
+  "presets": [{ "name": "t:general.step" }]
+}
+{% endschema %}

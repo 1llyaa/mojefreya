@@ -1,0 +1,68 @@
+<div class="usp{% if block.settings.highlighted %} usp--highlighted{% endif %}" {{ block.shopify_attributes }}>
+  <div class="usp__mark" aria-hidden="true">
+    {% if block.settings.icon %}
+      {{ block.settings.icon | image_url: width: 64 | image_tag: alt: '', class: 'usp__icon' }}
+    {% endif %}
+  </div>
+  <div>
+    <p class="usp__title">{{ block.settings.title }}</p>
+    <p class="usp__body">{{ block.settings.body }}</p>
+  </div>
+</div>
+
+{% stylesheet %}
+  .usp {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background-color: var(--color-background);
+  }
+
+  .usp--highlighted {
+    background-color: color-mix(in srgb, var(--color-surface-alt) 70%, var(--color-background));
+    border-color: color-mix(in srgb, var(--color-surface-alt) 60%, var(--color-foreground) 12%);
+  }
+
+  .usp__mark {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: color-mix(in srgb, var(--color-surface-alt) 78%, var(--color-foreground) 8%);
+  }
+
+  .usp__icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .usp__title {
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+
+  .usp__body {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+    line-height: 1.45;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.usp_card",
+  "settings": [
+    { "type": "text", "id": "title", "label": "t:labels.title", "default": "Rychlé výsledky" },
+    { "type": "text", "id": "body", "label": "t:labels.body", "default": "Znatelný pokles ochlupení po 1–3 aplikacích." },
+    { "type": "image_picker", "id": "icon", "label": "t:labels.icon" },
+    { "type": "checkbox", "id": "highlighted", "label": "t:labels.highlighted", "info": "t:info.highlighted", "default": false }
+  ],
+  "presets": [{ "name": "t:general.usp_card" }]
+}
+{% endschema %}

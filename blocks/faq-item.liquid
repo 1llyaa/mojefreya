@@ -1,0 +1,66 @@
+<details class="faq__item" {% if block.settings.open_by_default %}open{% endif %} {{ block.shopify_attributes }}>
+  <summary class="faq__question">
+    <span>{{ block.settings.question }}</span>
+    <span class="faq__marker" aria-hidden="true"></span>
+  </summary>
+  <div class="faq__answer">{{ block.settings.answer }}</div>
+</details>
+
+{% stylesheet %}
+  .faq__item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 0 12px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__marker {
+    flex: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lead);
+    line-height: 1;
+  }
+
+  .faq__marker::before {
+    content: "+";
+  }
+
+  .faq__item[open] .faq__marker::before {
+    content: "−";
+  }
+
+  .faq__answer {
+    padding-block: 0 16px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+    line-height: 1.55;
+  }
+
+  .faq__answer > :is(p, ul, ol):first-child {
+    margin-block-start: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.faq_item",
+  "settings": [
+    { "type": "text", "id": "question", "label": "t:labels.question", "default": "Bolí to?" },
+    { "type": "richtext", "id": "answer", "label": "t:labels.answer", "default": "<p>Ne, na rozdíl od jiných metod je ošetření v podstatě bezbolestné.</p>" },
+    { "type": "checkbox", "id": "open_by_default", "label": "t:labels.open_by_default", "info": "t:info.open_by_default", "default": false }
+  ],
+  "presets": [{ "name": "t:general.faq_item" }]
+}
+{% endschema %}

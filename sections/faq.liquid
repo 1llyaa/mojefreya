@@ -1,0 +1,45 @@
+<div class="band faq full-width">
+  <div class="band__inner">
+    <h2 class="faq__heading">{{ section.settings.heading }}</h2>
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .faq {
+    padding-block: 32px;
+  }
+
+  .faq__heading {
+    margin: 0 0 8px;
+  }
+
+  @media (min-width: 750px) {
+    .faq {
+      padding-block: 56px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.faq",
+  "blocks": [{ "type": "faq-item" }],
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:labels.heading", "default": "Časté dotazy" }
+  ],
+  "presets": [
+    {
+      "name": "t:general.faq",
+      "blocks": [
+        { "type": "faq-item", "settings": { "question": "Bolí to?", "answer": "<p>Ne, na rozdíl od jiných metod je ošetření v podstatě bezbolestné.</p>", "open_by_default": true } },
+        { "type": "faq-item", "settings": { "question": "Funguje to na každou pokožku?", "answer": "<p>Nejlépe u světlé pokožky a tmavších chloupků. U velmi světlých, šedých a zrzavých chloupků je účinnost nižší.</p>", "open_by_default": true } },
+        { "type": "faq-item", "settings": { "question": "Kdy uvidím výsledky?", "answer": "<p>Výrazné snížení růstu obvykle po 2–4 aplikacích.</p>" } },
+        { "type": "faq-item", "settings": { "question": "Je to bezpečné?", "answer": "<p>Ano, při použití dle návodu. Nevhodné v těhotenství a při kojení, u tetování držte odstup 1–2 cm.</p>" } },
+        { "type": "faq-item", "settings": { "question": "Mohu se mezitím holit?", "answer": "<p>Ano, holení je před každou aplikací potřeba.</p>" } },
+        { "type": "faq-item", "settings": { "question": "Je výsledek trvalý?", "answer": "<p>Efekt je dlouhodobý. Doporučujeme doplňkové ošetření cca každých 6 týdnů.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

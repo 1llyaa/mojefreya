@@ -14,8 +14,9 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "menu": "footer-1",
+        "show_cookie_preferences": true,
+        "operator": "Provozovatel: [firma], IČO [xxx], [adresa], [e-mail]"
       }
     }
   },

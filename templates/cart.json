@@ -12,9 +12,23 @@
     "main": {
       "type": "cart",
       "settings": {}
+    },
+    "17909541431c2e5faf": {
+      "type": "apps",
+      "blocks": {
+        "heureka_zbozi_tracking_heureka_ixxRyh": {
+          "type": "shopify://apps/heureka-zbozi-tracking/blocks/heureka/fad31fc5-58c1-4a55-bfdb-ce42c3a8f969",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heureka_zbozi_tracking_heureka_ixxRyh"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "17909541431c2e5faf"
   ]
 }

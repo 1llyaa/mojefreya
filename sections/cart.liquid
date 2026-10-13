@@ -30,7 +30,10 @@
                 <p class="cart__item-variant">{{ item.variant.title }}</p>
               {% endunless %}
 
-              <p class="cart__item-price">{{ item.final_line_price | money_without_trailing_zeros }}</p>
+              {% liquid
+                assign line_compare = item.variant.compare_at_price | times: item.quantity
+              %}
+              <p class="cart__item-price">{% render 'price', price: item.final_line_price, compare_at_price: line_compare %}</p>
 
               <div class="cart__item-actions">
                 <label class="visually-hidden" for="quantity-{{ forloop.index }}">
@@ -55,7 +58,7 @@
       <div class="cart__summary">
         <div class="cart__total">
           <span>{{ 'cart.subtotal' | t }}</span>
-          <span class="cart__total-value">{{ cart.total_price | money_without_trailing_zeros }}</span>
+          <span class="cart__total-value">{% render 'format-price', amount: cart.total_price %}</span>
         </div>
         <p class="cart__note">{{ 'cart.taxes_note' | t }}</p>
 

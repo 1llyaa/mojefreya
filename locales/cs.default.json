@@ -45,8 +45,13 @@
     }
   },
   "footer": {
-    "cookie_preferences": "Nastavení cookies",
-    "legal": "Právní informace"
+    "legal": "Právní informace",
+    "terms": "Obchodní podmínky",
+    "refund": "Vrácení a reklamace",
+    "privacy": "Ochrana osobních údajů",
+    "shipping": "Doprava a platba",
+    "contact": "Kontakt",
+    "phone": "Tel."
   },
   "gallery": {
     "label": "Galerie produktu",
@@ -61,7 +66,8 @@
     "use_at_checkout": "Poukaz uplatníte v pokladně"
   },
   "guarantee": {
-    "accepted": "Přijímáme"
+    "accepted": "Přijímáme",
+    "cod": "Dobírka"
   },
   "header": {
     "cart": "Košík",
@@ -78,8 +84,7 @@
     "enter": "Vstoupit"
   },
   "product": {
-    "add_to_cart": "Přidat do košíku",
-    "buy": "Do košíku",
+    "buy": "Koupit",
     "price_compare": "Původní cena",
     "price_current": "Aktuální cena",
     "rating_aria": "Hodnocení {{ rating }} z 5",
@@ -89,8 +94,9 @@
       "many": "({{ count }} recenze)",
       "other": "({{ count }} recenzí)"
     },
-    "savings": "Ušetříte {{ amount }}",
-    "sold_out": "Vyprodáno"
+    "sold_out": "Vyprodáno",
+    "buy_for_html": "Koupit za {{ price }}",
+    "savings_html": "Ušetříte {{ amount }}"
   },
   "search": {
     "title": "Vyhledávání",
@@ -98,5 +104,10 @@
     "submit": "Hledat",
     "no_results_html": "Pro {{ terms }} jsme nic nenašli",
     "results_for_html": "Počet výsledků pro {{ terms }}: {{ count }}"
+  },
+  "seller": {
+    "czech_seller": "Český prodejce",
+    "warranty": "Záruka 2 roky",
+    "support": "Podpora {{ hours }}"
   }
 }

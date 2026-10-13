@@ -53,7 +53,10 @@
     "theme": "Theme",
     "typography": "Typography",
     "usp_card": "Benefit card",
-    "usp_list": "Benefits"
+    "usp_list": "Benefits",
+    "support": "Customer support",
+    "seller_info": "Who we are",
+    "buy_block": "Buy block"
   },
   "labels": {
     "accent": "Accent",
@@ -63,6 +66,7 @@
     "body": "Body",
     "customer_account_menu": "Customer account menu",
     "effective_from": "Effective from",
+    "fact_delivery": "Delivery line",
     "fact_payment": "Payment line",
     "fact_shipping_returns": "Shipping and returns line",
     "featured_product": "Product",
@@ -86,9 +90,9 @@
     "question": "Question",
     "review_count": "Review count",
     "review_rating": "Rating",
-    "show_cookie_preferences": "Show cookie preferences link",
     "show_description": "Show product description",
     "show_payment_icons": "Show payment icons",
+    "show_policies": "List store policies",
     "show_topbar": "Show top bar",
     "subheading": "Subheading",
     "surface": "Section surface",
@@ -96,7 +100,14 @@
     "text": "Text",
     "text_secondary": "Secondary text",
     "text_style": "Text style",
-    "title": "Title"
+    "title": "Title",
+    "eyebrow": "Eyebrow",
+    "heading_style": "Heading typeface",
+    "support_email": "Support e-mail",
+    "support_phone": "Support phone",
+    "support_hours": "Support hours",
+    "badge": "Badge",
+    "note": "Note"
   },
   "options": {
     "alignment": {
@@ -120,26 +131,35 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
+    },
+    "heading_style": {
+      "instrument_serif_400": "Instrument Serif 400 (current)",
+      "source_serif_600": "Source Serif 4 600",
+      "instrument_sans_600": "Instrument Sans 600"
     }
   },
   "info": {
     "accent": "Reserved for the call to action. Using it anywhere else costs the button its pull.",
     "background": "Warm ivory, not white.",
     "commerce_facts": "These appear in the top bar, in the fold and in the terms page. Change them here so they cannot drift apart.",
+    "fact_delivery": "Shown under the price in the fold.",
+    "fact_shipping_returns": "Shown in the top bar.",
     "featured_product": "Leave empty on the product template to use the current product. Required on the homepage.",
     "fold_heading": "Leave empty to use the product title.",
     "fonts_selfhosted": "Instrument Serif and Instrument Sans are self-hosted in the theme assets. They are part of the brand, so they are not merchant-selectable.",
-    "footer_menu": "Link the terms, complaints procedure, privacy policy and shipping pages here.",
+    "footer_menu": "Optional extra links after the store policies.",
     "highlighted": "Exactly one card should be highlighted. It uses a frame and a warm tone, never the accent colour.",
     "legal_notice": "Shown in a highlighted box above the page content.",
     "open_by_default": "Open the two most common concerns; leave the rest closed.",
-    "operator": "Company name, registration number, address and contact e-mail. Legally required.",
+    "operator": "Company name, registration number and registered address. Phone and e-mail come from Theme settings › Commerce facts.",
     "review_count": "Connect this to a product metafield with the dynamic source button, or type a number. Use an Integer metafield.",
     "review_rating": "Connect this to a product metafield with the dynamic source button, or type a number. A Decimal metafield is the most reliable type.",
     "reviews_guard": "The rating block only appears when the count is at least 5 and the rating at least 4.0. Below that it is hidden entirely.",
-    "show_cookie_preferences": "Opens Shopify's own cookie preferences dialog. The link stays hidden unless the consent API is available.",
     "show_description": "Pulled from the product's own description field in admin. Sits below the buy button so it never pushes the price or button out of the first screen.",
+    "show_policies": "Lists the policies from Settings › Policies in a fixed order with Czech names. The menu below adds extra links after them.",
     "show_topbar": "Carries the shipping and returns line set under Commerce facts.",
-    "surface_alt": "Use at most twice per page."
+    "surface_alt": "Use at most twice per page.",
+    "heading_style": "Temporary switch to compare variants (W2). Instrument Serif ships only weight 400; bold headings need another face.",
+    "support_email": "Shown in the footer and the Who we are block. Empty = no e-mail shown."
   }
 }

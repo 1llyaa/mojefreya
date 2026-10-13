@@ -1,0 +1,56 @@
+{% doc %}
+  Styles Shopify's policy pages (/policies/*) to match the theme.
+
+  Policy pages render inside the theme layout, so the header, footer, fonts and
+  critical CSS already apply, but the body itself is injected by Shopify into
+  `.shopify-policy__container`. There is no policy template type, so the markup
+  cannot be restructured, only styled.
+
+  Unlike the consent banner, no `!important` is needed here: Shopify ships no
+  competing stylesheet for these pages.
+
+  @example
+  {% render 'policy-page-styles' %}
+{% enddoc %}
+
+{% stylesheet %}
+  .shopify-policy__container {
+    box-sizing: border-box;
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding: 32px var(--page-margin) 40px;
+  }
+
+  .shopify-policy__title h1 {
+    margin: 0 0 24px;
+  }
+
+  .shopify-policy__body {
+    line-height: 1.6;
+  }
+
+  .shopify-policy__body :is(h2, h3) {
+    margin-block: 32px 8px;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight);
+  }
+
+  .shopify-policy__body h2 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+  }
+
+  .shopify-policy__body :is(p, ul, ol) {
+    margin-block: 0 12px;
+    color: var(--color-text-secondary);
+  }
+
+  .shopify-policy__body :is(ul, ol) {
+    padding-inline-start: 20px;
+  }
+
+  .shopify-policy__body a {
+    color: inherit;
+    text-underline-offset: 2px;
+  }
+{% endstylesheet %}

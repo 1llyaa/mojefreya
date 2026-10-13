@@ -1,0 +1,130 @@
+{% liquid
+  assign target = product
+  if section.settings.featured_product != blank
+    assign target = section.settings.featured_product
+  endif
+  assign variant = target.selected_or_first_available_variant
+%}
+
+{% if variant %}
+  <div class="band band--surface buy-block full-width">
+    <div class="band__inner buy-block__inner">
+      {% if section.settings.heading != blank %}
+        <h2 class="buy-block__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      <div class="buy-block__price">
+        <span class="buy-block__price-current">
+          <span class="visually-hidden">{{ 'product.price_current' | t }}</span>
+          {% render 'format-price', amount: variant.price %}
+        </span>
+        {% if variant.compare_at_price > variant.price %}
+          <s class="buy-block__price-compare">
+            <span class="visually-hidden">{{ 'product.price_compare' | t }}</span>
+            {% render 'format-price', amount: variant.compare_at_price %}
+          </s>
+        {% endif %}
+      </div>
+
+      {% form 'product', target, class: 'buy-block__form' %}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <input type="hidden" name="return_to" value="/checkout">
+        <button
+          type="submit"
+          class="button button--accent button--full buy-block__cta"
+          data-buy-anchor
+          {% unless variant.available %}disabled{% endunless %}
+        >
+          {% if variant.available %}
+            {%- capture price_display -%}{% render 'format-price', amount: variant.price %}{%- endcapture -%}
+            {{ 'product.buy_for_html' | t: price: price_display }}
+          {% else %}
+            {{ 'product.sold_out' | t }}
+          {% endif %}
+        </button>
+      {% endform %}
+
+      {% if section.settings.note != blank %}
+        <p class="buy-block__note">{{ section.settings.note }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .buy-block {
+    padding-block: 32px;
+  }
+
+  .buy-block__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: var(--measure);
+    text-align: center;
+  }
+
+  .buy-block__heading {
+    margin: 0;
+  }
+
+  .buy-block__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .buy-block__price-current {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .buy-block__price-compare {
+    color: var(--color-text-muted);
+  }
+
+  .buy-block__form {
+    width: 100%;
+  }
+
+  .buy-block__cta {
+    min-height: 52px;
+  }
+
+  .buy-block__cta[disabled] {
+    background-color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  .buy-block__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-micro);
+  }
+
+  @media (min-width: 750px) {
+    .buy-block {
+      padding-block: 56px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.buy_block",
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "t:labels.featured_product",
+      "info": "t:info.featured_product"
+    },
+    { "type": "text", "id": "heading", "label": "t:labels.heading" },
+    { "type": "text", "id": "note", "label": "t:labels.note", "default": "60 dní na vyzkoušení" }
+  ],
+  "presets": [{ "name": "t:general.buy_block" }]
+}
+{% endschema %}

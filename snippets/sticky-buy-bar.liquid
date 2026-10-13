@@ -5,6 +5,10 @@
   The button sits outside that form and reaches it through the HTML `form`
   attribute, so the page carries one product form rather than two.
 
+  The bar stays hidden while any element marked `data-buy-anchor` (the fold
+  button, the buy block under the FAQ) is on screen, so the page never shows
+  two identical buy buttons at once.
+
   @param {string} form_id - The id of the product form this button submits
   @param {object} variant - The variant whose price and availability are shown
 
@@ -12,17 +16,17 @@
   {% render 'sticky-buy-bar', form_id: 'fold-buy', variant: product.selected_or_first_available_variant %}
 {% enddoc %}
 
-<div class="sticky-buy">
+<div class="sticky-buy is-hidden" data-sticky-buy>
   <div class="sticky-buy__inner">
     <div class="sticky-buy__price">
       <span class="sticky-buy__price-current">
         <span class="visually-hidden">{{ 'product.price_current' | t }}</span>
-        {{ variant.price | money_without_trailing_zeros }}
+        {% render 'format-price', amount: variant.price %}
       </span>
       {% if variant.compare_at_price > variant.price %}
         <s class="sticky-buy__price-compare">
           <span class="visually-hidden">{{ 'product.price_compare' | t }}</span>
-          {{ variant.compare_at_price | money_without_trailing_zeros }}
+          {% render 'format-price', amount: variant.compare_at_price %}
         </s>
       {% endif %}
     </div>
@@ -30,7 +34,7 @@
     <button
       type="submit"
       form="{{ form_id }}"
-      class="button sticky-buy__cta"
+      class="button button--accent sticky-buy__cta"
       {% unless variant.available %}disabled{% endunless %}
     >
       {% if variant.available %}
@@ -53,6 +57,12 @@
     padding-block-end: max(10px, env(safe-area-inset-bottom));
     background-color: var(--color-background);
     box-shadow: var(--elevation-2);
+    transition: transform 0.25s ease, visibility 0.25s;
+  }
+
+  .sticky-buy.is-hidden {
+    visibility: hidden;
+    transform: translateY(100%);
   }
 
   .sticky-buy__inner {
@@ -89,11 +99,10 @@
     font-size: var(--font-size-body);
   }
 
-  /* The sticky bar exists because the mobile fold scrolls the CTA away.
-     On desktop the fold CTA stays in view, so the bar is redundant chrome. */
   @media (min-width: 750px) {
-    .sticky-buy {
-      display: none;
+    .sticky-buy__cta {
+      flex: none;
+      min-width: 240px;
     }
   }
 
@@ -102,3 +111,31 @@
     cursor: not-allowed;
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const bar = document.querySelector('[data-sticky-buy]');
+    const anchors = document.querySelectorAll('[data-buy-anchor]');
+    if (!bar) return;
+
+    if (anchors.length === 0 || !('IntersectionObserver' in window)) {
+      bar.classList.remove('is-hidden');
+      return;
+    }
+
+    const visible = new Set();
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          visible.add(entry.target);
+        } else {
+          visible.delete(entry.target);
+        }
+      }
+      bar.classList.toggle('is-hidden', visible.size > 0);
+    });
+
+    anchors.forEach((anchor) => observer.observe(anchor));
+  })();
+{% endjavascript %}

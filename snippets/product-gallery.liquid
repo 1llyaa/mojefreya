@@ -1,6 +1,7 @@
 {% doc %}
-  Renders a square, swipeable product gallery with position dots overlaid on the
-  image.
+  Renders a square, swipeable product gallery. On mobile the next photo peeks
+  in from the edge and position dots sit below; on desktop 64px thumbnails
+  replace the dots.
 
   Scrolling is native CSS scroll-snap, so swipe, trackpad and keyboard all work
   before any JavaScript runs. The script only keeps the dots in sync and makes
@@ -74,6 +75,25 @@
           ></button>
         {% endfor %}
       </div>
+
+      <div class="gallery__thumbs" role="tablist" aria-label="{{ 'gallery.choose' | t }}">
+        {% for image in images %}
+          <button
+            class="gallery__thumb"
+            type="button"
+            role="tab"
+            data-index="{{ forloop.index0 }}"
+            aria-label="{{ 'gallery.go_to' | t: index: forloop.index }}"
+            {% if forloop.first %}
+              aria-selected="true"
+            {% else %}
+              aria-selected="false"
+            {% endif %}
+          >
+            {{ image | image_url: width: 128, height: 128, crop: 'center' | image_tag: alt: '', class: 'gallery__thumb-image', loading: 'lazy', width: 64, height: 64 }}
+          </button>
+        {% endfor %}
+      </div>
     {% endif %}
   </product-gallery>
 {% endif %}
@@ -82,9 +102,6 @@
   .gallery {
     position: relative;
     display: block;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: var(--color-surface-alt);
   }
 
   .gallery__track {
@@ -100,14 +117,26 @@
   }
 
   .gallery__track:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-foreground);
     outline-offset: -2px;
   }
 
   .gallery__slide {
     flex: 0 0 100%;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
     scroll-snap-stop: always;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--color-surface-alt);
+  }
+
+  /* Let the next photo peek in so the gallery reads as swipeable. */
+  .gallery[data-multiple] .gallery__track {
+    gap: 8px;
+  }
+
+  .gallery[data-multiple] .gallery__slide {
+    flex-basis: 88%;
   }
 
   .gallery__image {
@@ -119,52 +148,107 @@
 
   .gallery__dots {
     position: absolute;
-    inset-block-end: 12px;
+    inset-block-end: 8px;
     inset-inline: 0;
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 6px 10px;
     width: fit-content;
     margin-inline: auto;
+    padding: 0 4px;
     border-radius: 999px;
     background-color: color-mix(in srgb, var(--color-background) 72%, transparent);
     backdrop-filter: blur(6px);
   }
 
+  /* The button is the 24px hit area; the visible dot is drawn inside it. */
   .gallery__dot {
-    position: relative;
-    width: 8px;
-    height: 8px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border: none;
-    border-radius: 50%;
-    background-color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    background: none;
     cursor: pointer;
+  }
+
+  .gallery__dot::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #807c78;
     transition: background-color 150ms ease-out, transform 150ms ease-out;
   }
 
-  .gallery__dot[aria-selected="true"] {
+  .gallery__dot[aria-selected="true"]::before {
     background-color: var(--color-foreground);
     transform: scale(1.25);
   }
 
-  /* The dot is 8px, but the hit area has to clear the 24px minimum. */
-  .gallery__dot::after {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: -8px;
+  .gallery__dot:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: -2px;
+    border-radius: 50%;
   }
 
-  .gallery__dot:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
+  .gallery__thumbs {
+    display: none;
+  }
+
+  @media (min-width: 750px) {
+    .gallery[data-multiple] .gallery__track {
+      gap: 0;
+    }
+
+    .gallery[data-multiple] .gallery__slide {
+      flex-basis: 100%;
+    }
+
+    .gallery__dots {
+      display: none;
+    }
+
+    .gallery__thumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-block-start: 12px;
+    }
+
+    .gallery__thumb {
+      width: 64px;
+      height: 64px;
+      padding: 0;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: var(--color-surface-alt);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 150ms ease-out, border-color 150ms ease-out;
+    }
+
+    .gallery__thumb[aria-selected="true"] {
+      border-color: var(--color-foreground);
+      opacity: 1;
+    }
+
+    .gallery__thumb:focus-visible {
+      outline: 2px solid var(--color-foreground);
+      outline-offset: 2px;
+    }
+
+    .gallery__thumb-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gallery__dot {
+    .gallery__dot::before,
+    .gallery__thumb {
       transition: none;
     }
   }
@@ -174,7 +258,7 @@
   class ProductGallery extends HTMLElement {
     connectedCallback() {
       this.track = this.querySelector('.gallery__track');
-      this.dots = Array.from(this.querySelectorAll('.gallery__dot'));
+      this.dots = Array.from(this.querySelectorAll('.gallery__dot, .gallery__thumb'));
       if (!this.track || this.dots.length === 0) return;
 
       this.slides = Array.from(this.querySelectorAll('.gallery__slide'));

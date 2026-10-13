@@ -83,12 +83,12 @@ body {
 
 /**
  * Type scale. Display face on headings only, body face everywhere else.
- * Sizes come from the 14/16/20/24/32 scale; nothing lands between them.
+ * H2 steps up to 36px on desktop so section titles stand clear of body copy.
  */
 h1,
 h2 {
-  font-family: var(--font-display--family);
-  font-weight: 400;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
 }
 
 h1 {
@@ -99,6 +99,12 @@ h1 {
 h2 {
   font-size: var(--font-size-h2);
   line-height: var(--line-height-h2);
+}
+
+@media (min-width: 750px) {
+  :root {
+    --font-size-h2: 2.25rem;
+  }
 }
 
 /* Secondary copy: sub-heads, captions, microcopy. */
@@ -112,7 +118,8 @@ h2 {
 
 /**
  * Buttons. 48px min-height is a tap target floor, not a look.
- * The accent is spent here and nowhere else on the page.
+ * Neutral by default: the accent is reserved for the buy buttons
+ * (`.button--accent`) and appears nowhere else on the site.
  */
 .button {
   display: inline-flex;
@@ -128,32 +135,31 @@ h2 {
   line-height: 1;
   text-decoration: none;
   cursor: pointer;
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+  box-shadow: var(--elevation-1);
+}
+
+.button--accent {
   background-color: var(--color-accent);
   color: var(--color-on-accent);
-  box-shadow: var(--elevation-1);
 }
 
 .button--full {
   width: 100%;
 }
 
-/* Secondary action: same geometry, no accent fill. */
+/* Secondary action: same geometry, no fill. */
 .button--outline {
   background-color: transparent;
-  color: var(--color-accent);
-  border: 1.5px solid var(--color-accent);
+  color: var(--color-foreground);
+  border: 1.5px solid var(--color-foreground);
   box-shadow: none;
 }
 
 /* The sticky purchase bar is fixed; keep it off the last section's content. */
 body:has(.sticky-buy) {
   padding-block-end: 76px;
-}
-
-@media (min-width: 750px) {
-  body:has(.sticky-buy) {
-    padding-block-end: 0;
-  }
 }
 
 /**
@@ -199,7 +205,7 @@ body:has(.sticky-buy) {
 
 /* Keyboard focus. The reset removed nothing here - the theme simply had none. */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-foreground);
   outline-offset: 2px;
 }
 

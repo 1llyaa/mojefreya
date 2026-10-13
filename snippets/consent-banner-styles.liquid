@@ -33,9 +33,9 @@
 
   #shopify-pc__banner .shopify-pc__banner__body-title,
   #shopify-pc__prefs .shopify-pc__prefs__header-title {
-    font-family: var(--font-display--family) !important;
+    font-family: var(--font-heading--family) !important;
     font-size: var(--font-size-h2) !important;
-    font-weight: 400 !important;
+    font-weight: var(--font-heading--weight) !important;
     line-height: var(--line-height-h2) !important;
     color: var(--color-foreground) !important;
   }
@@ -60,14 +60,14 @@
     font-weight: 600 !important;
   }
 
-  /* Accept is the single accented control here, mirroring the rule that the
-     accent colour is spent on one action per view. */
+  /* Accept is the single filled control here. The accent stays reserved for
+     the buy buttons, so it uses the neutral foreground fill. */
   #shopify-pc__banner .shopify-pc__banner__btn-accept,
   #shopify-pc__prefs .shopify-pc__prefs__header-accept,
   #shopify-pc__prefs .shopify-pc__prefs__header-save {
     border: none !important;
-    background: var(--color-accent) !important;
-    color: var(--color-on-accent) !important;
+    background: var(--color-foreground) !important;
+    color: var(--color-background) !important;
     box-shadow: var(--elevation-1) !important;
   }
 
@@ -81,7 +81,7 @@
 
   #shopify-pc__banner :focus-visible,
   #shopify-pc__prefs :focus-visible {
-    outline: 2px solid var(--color-accent) !important;
+    outline: 2px solid var(--color-foreground) !important;
     outline-offset: 2px !important;
   }
 {% endstylesheet %}

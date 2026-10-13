@@ -27,6 +27,18 @@
       {
         "type": "paragraph",
         "content": "t:info.fonts_selfhosted"
+      },
+      {
+        "type": "select",
+        "id": "heading_style",
+        "label": "t:labels.heading_style",
+        "info": "t:info.heading_style",
+        "default": "instrument_serif_400",
+        "options": [
+          { "value": "instrument_serif_400", "label": "t:options.heading_style.instrument_serif_400" },
+          { "value": "source_serif_600", "label": "t:options.heading_style.source_serif_600" },
+          { "value": "instrument_sans_600", "label": "t:options.heading_style.instrument_sans_600" }
+        ]
       }
     ]
   },
@@ -131,14 +143,44 @@
       {
         "type": "text",
         "id": "fact_shipping_returns",
-        "default": "Doprava 99 Kč · 60 dní na vrácení",
-        "label": "t:labels.fact_shipping_returns"
+        "default": "Doprava 69 Kč · 60 dní na vrácení",
+        "label": "t:labels.fact_shipping_returns",
+        "info": "t:info.fact_shipping_returns"
+      },
+      {
+        "type": "text",
+        "id": "fact_delivery",
+        "default": "Zásilkovna 69 Kč · doručení do 3 pracovních dnů",
+        "label": "t:labels.fact_delivery",
+        "info": "t:info.fact_delivery"
       },
       {
         "type": "text",
         "id": "fact_payment",
-        "default": "Platba kartou i na dobírku",
+        "default": "Platba kartou, Apple Pay, Google Pay nebo na dobírku (+40 Kč)",
         "label": "t:labels.fact_payment"
+      },
+      {
+        "type": "header",
+        "content": "t:general.support"
+      },
+      {
+        "type": "text",
+        "id": "support_email",
+        "label": "t:labels.support_email",
+        "info": "t:info.support_email"
+      },
+      {
+        "type": "text",
+        "id": "support_phone",
+        "default": "737 199 066",
+        "label": "t:labels.support_phone"
+      },
+      {
+        "type": "text",
+        "id": "support_hours",
+        "default": "po–pá 9–17",
+        "label": "t:labels.support_hours"
       }
     ]
   }

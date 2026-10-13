@@ -1,0 +1,41 @@
+{% doc %}
+  Outputs a price as "1 999 Kč", with no-break spaces between thousands and
+  before the currency, so it never wraps or reads as "1.999,00 Kč".
+
+  The money filters follow the store's currency format from admin, which is
+  shared with checkout and e-mails. Whole-crown CZK amounts are formatted here
+  instead so the storefront stays consistent whatever that setting says. Any
+  other currency, or an amount with hellers, falls back to the store format.
+
+  @param {number} amount - Price in the currency's subunit, e.g. variant.price
+
+  @example
+  {% render 'format-price', amount: variant.price %}
+{% enddoc %}
+
+{%- liquid
+  assign cents = amount | modulo: 100
+  assign whole = amount | divided_by: 100
+
+  if cart.currency.iso_code != 'CZK'
+    echo amount | money_without_trailing_zeros
+  elsif cents != 0
+    echo amount | money_without_trailing_zeros
+  else
+    assign nbsp = '&nbsp;'
+    assign millions = whole | divided_by: 1000000
+    assign thousands = whole | modulo: 1000000 | divided_by: 1000
+    assign units = whole | modulo: 1000
+
+    if millions > 0
+      assign thousands_padded = thousands | plus: 1000 | append: '' | slice: 1, 3
+      assign units_padded = units | plus: 1000 | append: '' | slice: 1, 3
+      echo millions | append: nbsp | append: thousands_padded | append: nbsp | append: units_padded | append: nbsp | append: 'Kč'
+    elsif thousands > 0
+      assign units_padded = units | plus: 1000 | append: '' | slice: 1, 3
+      echo thousands | append: nbsp | append: units_padded | append: nbsp | append: 'Kč'
+    else
+      echo units | append: nbsp | append: 'Kč'
+    endif
+  endif
+-%}

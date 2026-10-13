@@ -45,8 +45,13 @@
     }
   },
   "footer": {
-    "cookie_preferences": "Cookie preferences",
-    "legal": "Legal information"
+    "legal": "Legal information",
+    "terms": "Terms of service",
+    "refund": "Returns and complaints",
+    "privacy": "Privacy policy",
+    "shipping": "Shipping and payment",
+    "contact": "Contact",
+    "phone": "Phone"
   },
   "gallery": {
     "label": "Product gallery",
@@ -61,7 +66,8 @@
     "use_at_checkout": "Use this gift card at checkout"
   },
   "guarantee": {
-    "accepted": "We accept"
+    "accepted": "We accept",
+    "cod": "Cash on delivery"
   },
   "header": {
     "cart": "Cart",
@@ -76,8 +82,7 @@
     "enter": "Enter"
   },
   "product": {
-    "add_to_cart": "Add to cart",
-    "buy": "Buy now",
+    "buy": "Buy",
     "price_compare": "Original price",
     "price_current": "Current price",
     "rating_aria": "Rated {{ rating }} out of 5",
@@ -85,8 +90,9 @@
       "one": "({{ count }} review)",
       "other": "({{ count }} reviews)"
     },
-    "savings": "Save {{ amount }}",
-    "sold_out": "Sold out"
+    "sold_out": "Sold out",
+    "buy_for_html": "Buy for {{ price }}",
+    "savings_html": "You save {{ amount }}"
   },
   "search": {
     "title": "Search",
@@ -94,5 +100,10 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "seller": {
+    "czech_seller": "Czech seller",
+    "warranty": "2-year warranty",
+    "support": "Support {{ hours }}"
   }
 }

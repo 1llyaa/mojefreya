@@ -10,14 +10,18 @@
       </div>
 
       {% if section.settings.show_payment_icons %}
-        {% if shop.enabled_payment_types.size > 0 %}
-          <div class="guarantee__payments">
-            <span class="guarantee__payments-label">{{ 'guarantee.accepted' | t }}</span>
-            {% for type in shop.enabled_payment_types %}
-              {{ type | payment_type_svg_tag: class: 'guarantee__payment-icon' }}
-            {% endfor %}
-          </div>
-        {% endif %}
+        {% comment %}
+          A fixed list matching what checkout offers, rather than every type
+          the payment provider enables (Amex, UnionPay, PayPal...).
+        {% endcomment %}
+        {% assign payment_icons = 'visa,master,apple_pay,google_pay' | split: ',' %}
+        <div class="guarantee__payments">
+          <span class="guarantee__payments-label">{{ 'guarantee.accepted' | t }}</span>
+          {% for type in payment_icons %}
+            {{ type | payment_type_svg_tag: class: 'guarantee__payment-icon' }}
+          {% endfor %}
+          <span class="guarantee__payment-text">{{ 'guarantee.cod' | t }}</span>
+        </div>
       {% endif %}
     </div>
   </div>
@@ -91,14 +95,26 @@
     width: 34px;
     height: 22px;
   }
+
+  .guarantee__payment-text {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 6px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.guarantee",
   "settings": [
-    { "type": "text", "id": "title", "label": "t:labels.title", "default": "60 dní na vrácení" },
-    { "type": "text", "id": "body", "label": "t:labels.body", "default": "Nesedne? Pošlete zpět a vrátíme peníze." },
+    { "type": "text", "id": "title", "label": "t:labels.title", "default": "Vyzkoušejte 60 dní doma" },
+    { "type": "text", "id": "body", "label": "t:labels.body", "default": "IPL potřebuje pár týdnů. Když nebudete spokojená, pošlete přístroj zpět a vrátíme peníze." },
     { "type": "checkbox", "id": "show_payment_icons", "label": "t:labels.show_payment_icons", "default": true }
   ],
   "presets": [{ "name": "t:general.guarantee" }]

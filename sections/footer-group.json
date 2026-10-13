@@ -11,16 +11,21 @@
   "type": "footer",
   "name": "t:general.footer",
   "sections": {
+    "seller_info": {
+      "type": "seller-info",
+      "settings": {}
+    },
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "footer-1",
-        "show_cookie_preferences": true,
-        "operator": "Provozovatel: [firma], IČO [xxx], [adresa], [e-mail]"
+        "show_policies": true,
+        "menu": "",
+        "operator": "Provozovatel: Delina Czechia s.r.o., IČO 11792094, Vítkova 188/22, 186 00 Praha 8"
       }
     }
   },
   "order": [
+    "seller_info",
     "footer"
   ]
 }

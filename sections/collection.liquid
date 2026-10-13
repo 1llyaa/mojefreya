@@ -23,7 +23,7 @@
         {% endif %}
         <div class="collection-product__content">
           <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+          <p>{% render 'price', price: product.price, compare_at_price: product.compare_at_price %}</p>
         </div>
       </div>
     {% endfor %}

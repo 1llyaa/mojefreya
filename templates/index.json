@@ -12,7 +12,8 @@
     "fold": {
       "type": "product-fold",
       "settings": {
-        "featured_product": "ipl"
+        "featured_product": "ipl",
+        "show_description": false
       }
     },
     "usp": {
@@ -31,13 +32,13 @@
           "type": "usp-card",
           "settings": {
             "title": "Rychlé výsledky",
-            "body": "Znatelný pokles ochlupení po 1–3 aplikacích."
+            "body": "Znatelný pokles ochlupení po 2–4 ošetřeních."
           }
         },
         "u3": {
           "type": "usp-card",
           "settings": {
-            "title": "Bezbolestné a bezpečné",
+            "title": "Šetrné a bezpečné",
             "body": "Šetrné k pokožce, vhodné i pro citlivé partie."
           }
         },
@@ -64,7 +65,7 @@
           "type": "step",
           "settings": {
             "title": "Oholit",
-            "body": "Pokožku před aplikací oholte, světlo se lépe dostane ke kořínkům."
+            "body": "Pokožku před ošetřením oholte, světlo se lépe dostane ke kořínkům."
           }
         },
         "s2": {
@@ -104,15 +105,15 @@
           "type": "faq-item",
           "settings": {
             "question": "Bolí to?",
-            "answer": "<p>Ne, na rozdíl od jiných metod je ošetření v podstatě bezbolestné.</p>",
+            "answer": "<p>Většina lidí cítí jen teplo nebo lehké štípnutí. Začněte na nejnižší z 5 úrovní intenzity a postupně přidávejte.</p>",
             "open_by_default": true
           }
         },
         "f2": {
           "type": "faq-item",
           "settings": {
-            "question": "Funguje to na každou pokožku?",
-            "answer": "<p>Nejlépe u světlé pokožky a tmavších chloupků. U velmi světlých, šedých a zrzavých chloupků je účinnost nižší.</p>",
+            "question": "Funguje na každou pokožku a chloupky?",
+            "answer": "<p>Nejlépe funguje na světlé až středně tmavé pokožce s tmavšími chloupky. Na velmi světlé, šedé a zrzavé chloupky je účinnost nižší.</p>",
             "open_by_default": true
           }
         },
@@ -120,28 +121,91 @@
           "type": "faq-item",
           "settings": {
             "question": "Kdy uvidím výsledky?",
-            "answer": "<p>Výrazné snížení růstu obvykle po 2–4 aplikacích.</p>"
+            "answer": "<p>Chloupků začne viditelně ubývat obvykle po 2–4 ošetřeních. Výsledky se liší podle typu pokožky a chloupků.</p>"
           }
         },
         "f4": {
           "type": "faq-item",
           "settings": {
-            "question": "Je to bezpečné?",
-            "answer": "<p>Ano, při použití dle návodu. Nevhodné v těhotenství a při kojení, u tetování držte odstup 1–2 cm.</p>"
+            "question": "Je výsledek trvalý?",
+            "answer": "<p>Efekt je dlouhodobý, ne trvalý. Pro udržení hladké pokožky ošetření zopakujte přibližně každých 6 týdnů.</p>"
           }
         },
         "f5": {
           "type": "faq-item",
           "settings": {
-            "question": "Mohu se mezitím holit?",
-            "answer": "<p>Ano, holení je před každou aplikací potřeba.</p>"
+            "question": "Musím se před ošetřením oholit?",
+            "answer": "<p>Ano, pokožku před každým ošetřením oholte, světlo se tak lépe dostane ke kořínkům. Mezi ošetřeními se holit můžete.</p>"
           }
         },
         "f6": {
           "type": "faq-item",
           "settings": {
-            "question": "Je výsledek trvalý?",
-            "answer": "<p>Efekt je dlouhodobý. Doporučujeme doplňkové ošetření cca každých 6 týdnů.</p>"
+            "question": "Na které části těla ho můžu použít?",
+            "answer": "<p>Na nohy, ruce, podpaží, linii bikin i obličej. Nepoužívejte ho v okolí očí.</p>"
+          }
+        },
+        "f7": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Je to bezpečné? Kdy přístroj nepoužívat?",
+            "answer": "<p>Při použití podle návodu ano. Nepoužívejte ho v těhotenství a při kojení, na tetování (držte odstup 1–2 cm), na znaménka a na podrážděnou nebo čerstvě opálenou pokožku. Při ošetření mějte nasazené ochranné brýle z balení.</p>"
+          }
+        },
+        "f8": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Je vhodný i pro muže?",
+            "answer": "<p>Ano, funguje stejně. Není určený na husté vousy na obličeji.</p>"
+          }
+        },
+        "f9": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Funguje bez kabelu?",
+            "answer": "<p>Ne, přístroj je napájený ze sítě a při ošetření musí být zapojený.</p>"
+          }
+        },
+        "f10": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Co je v balení?",
+            "answer": "<p>Epilátor, ochranné brýle, holicí strojek, adaptér a návod v češtině.</p>"
+          }
+        },
+        "f11": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Jak dlouho přístroj vydrží?",
+            "answer": "<p>Lampa vydrží přibližně 300 000 záblesků, což při běžném domácím používání stačí na řadu let.</p>"
+          }
+        },
+        "f12": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Kolik stojí doprava a jak dlouho trvá?",
+            "answer": "<p>Doručujeme na výdejní místo nebo do boxu Zásilkovny a do AlzaBoxu za 69 Kč. Zásilka dorazí obvykle do 3 pracovních dnů.</p>"
+          }
+        },
+        "f13": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Jak můžu zaplatit?",
+            "answer": "<p>Platební kartou, přes Apple Pay nebo Google Pay, nebo na dobírku při převzetí. Dobírka stojí 40 Kč navíc.</p>"
+          }
+        },
+        "f14": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Jak funguje vrácení do 60 dnů?",
+            "answer": "<p>Přístroj můžete do 60 dnů od převzetí vrátit, i když jste ho vyzkoušela. Pošlete ho kompletní a nepoškozený v původním balení, poštovné zpět hradíte vy. Peníze vrátíme do 14 dnů od doručení.</p>"
+          }
+        },
+        "f15": {
+          "type": "faq-item",
+          "settings": {
+            "question": "Jaká je záruka?",
+            "answer": "<p>Na přístroj se vztahuje zákonná záruka 24 měsíců.</p>"
           }
         }
       },
@@ -151,8 +215,23 @@
         "f3",
         "f4",
         "f5",
-        "f6"
+        "f6",
+        "f7",
+        "f8",
+        "f9",
+        "f10",
+        "f11",
+        "f12",
+        "f13",
+        "f14",
+        "f15"
       ]
+    },
+    "buy": {
+      "type": "buy-block",
+      "settings": {
+        "featured_product": "ipl"
+      }
     }
   },
   "order": [
@@ -161,6 +240,7 @@
     "steps",
     "about",
     "guarantee",
-    "faq"
+    "faq",
+    "buy"
   ]
 }

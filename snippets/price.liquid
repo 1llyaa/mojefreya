@@ -1,0 +1,41 @@
+{% doc %}
+  Renders a current price with the compare-at price struck through beside it,
+  for listings outside the fold: collection grid, cart lines, product fallback.
+
+  @param {number} price - Current price in the currency's subunit
+  @param {number} [compare_at_price] - Original price; shown only when higher
+
+  @example
+  {% render 'price', price: product.price, compare_at_price: product.compare_at_price %}
+{% enddoc %}
+
+<span class="price">
+  <span class="price__current">
+    <span class="visually-hidden">{{ 'product.price_current' | t }}</span>
+    {% render 'format-price', amount: price %}
+  </span>
+  {% if compare_at_price > price %}
+    <s class="price__compare">
+      <span class="visually-hidden">{{ 'product.price_compare' | t }}</span>
+      {% render 'format-price', amount: compare_at_price %}
+    </s>
+  {% endif %}
+</span>
+
+{% stylesheet %}
+  .price {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .price__current {
+    font-weight: 700;
+  }
+
+  .price__compare {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-micro);
+  }
+{% endstylesheet %}

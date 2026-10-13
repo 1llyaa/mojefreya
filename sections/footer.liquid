@@ -1,26 +1,63 @@
 <div class="band band--inverse site-footer full-width">
   <div class="band__inner site-footer__inner">
-    {% if section.settings.menu != blank %}
+    {% liquid
+      assign has_policy_links = false
+      if section.settings.show_policies
+        if shop.policies.size > 0
+          assign has_policy_links = true
+        endif
+      endif
+
+      assign has_menu = false
+      if section.settings.menu.links.size > 0
+        assign has_menu = true
+      endif
+    %}
+
+    {% if has_policy_links or has_menu %}
       <nav class="site-footer__links" aria-label="{{ 'footer.legal' | t }}">
-        {% for link in section.settings.menu.links %}
-          <a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a>
-        {% endfor %}
+        {% if has_policy_links %}
+          {% comment %}
+            Fixed order and Czech names, independent of the titles Shopify
+            generates for each policy, matched on the policy's URL handle.
+          {% endcomment %}
+          {% assign policy_handles = 'terms-of-service,refund-policy,privacy-policy,shipping-policy,contact-information' | split: ',' %}
+          {% for handle in policy_handles %}
+            {% assign policy_path = '/policies/' | append: handle %}
+            {% for policy in shop.policies %}
+              {% if policy.url contains policy_path %}
+                {% case handle %}
+                  {% when 'terms-of-service' %}
+                    {% assign policy_label = 'footer.terms' | t %}
+                  {% when 'refund-policy' %}
+                    {% assign policy_label = 'footer.refund' | t %}
+                  {% when 'privacy-policy' %}
+                    {% assign policy_label = 'footer.privacy' | t %}
+                  {% when 'shipping-policy' %}
+                    {% assign policy_label = 'footer.shipping' | t %}
+                  {% else %}
+                    {% assign policy_label = 'footer.contact' | t %}
+                {% endcase %}
+                <a class="site-footer__link" href="{{ policy.url }}">{{ policy_label }}</a>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
+
+        {% if has_menu %}
+          {% for link in section.settings.menu.links %}
+            <a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a>
+          {% endfor %}
+        {% endif %}
       </nav>
     {% endif %}
 
-    {% if section.settings.show_cookie_preferences %}
-      <button type="button" class="site-footer__link site-footer__prefs" hidden>
-        {{ 'footer.cookie_preferences' | t }}
-      </button>
-    {% endif %}
-
     {% if section.settings.operator != blank %}
-      <p class="site-footer__operator">{{ section.settings.operator }}</p>
+      <div class="site-footer__operator">
+        <p>{{ section.settings.operator }}</p>
+        <p>{% render 'support-contact' %}</p>
+      </div>
     {% endif %}
-
-    <p class="site-footer__copyright">
-      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
-    </p>
   </div>
 </div>
 
@@ -38,68 +75,55 @@
 
   .site-footer__links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px 16px;
+    flex-direction: column;
   }
 
   .site-footer__link {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .site-footer__prefs {
+    display: inline-flex;
+    align-items: center;
     align-self: flex-start;
-    padding: 0;
-    border: none;
-    background: none;
+    min-height: 44px;
     color: inherit;
-    font: inherit;
     text-decoration: underline;
-    text-underline-offset: 2px;
-    cursor: pointer;
+    text-underline-offset: 3px;
   }
 
-  .site-footer__operator,
-  .site-footer__copyright {
+  .site-footer__operator {
+    margin: 8px 0 0;
+    padding-block-start: 16px;
+    border-block-start: 1px solid color-mix(in srgb, currentcolor 14%, transparent);
+    color: color-mix(in srgb, currentcolor 72%, transparent);
+    line-height: 1.6;
+  }
+
+  .site-footer__operator > p {
     margin: 0;
-    color: color-mix(in srgb, currentcolor 78%, transparent);
+  }
+
+  .site-footer__operator .support-contact__link {
+    color: inherit;
+  }
+
+  @media (min-width: 750px) {
+    .site-footer {
+      padding-block: 48px;
+    }
+
+    .site-footer__links {
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: 24px;
+    }
   }
 {% endstylesheet %}
-
-{% javascript %}
-  (() => {
-    const button = document.querySelector('.site-footer__prefs');
-    if (!button) return;
-
-    const open = () => window.Shopify?.customerPrivacy?.showPreferences();
-
-    const reveal = () => {
-      if (!window.Shopify?.customerPrivacy?.showPreferences) return;
-      button.hidden = false;
-      button.addEventListener('click', open);
-    };
-
-    if (window.Shopify?.customerPrivacy) {
-      reveal();
-    } else {
-      window.Shopify?.loadFeatures?.(
-        [{ name: 'consent-tracking-api', version: '0.1' }],
-        (error) => {
-          if (!error) reveal();
-        }
-      );
-    }
-  })();
-{% endjavascript %}
 
 {% schema %}
 {
   "name": "t:general.footer",
   "settings": [
+    { "type": "checkbox", "id": "show_policies", "label": "t:labels.show_policies", "info": "t:info.show_policies", "default": true },
     { "type": "link_list", "id": "menu", "label": "t:labels.menu", "info": "t:info.footer_menu" },
-    { "type": "checkbox", "id": "show_cookie_preferences", "label": "t:labels.show_cookie_preferences", "info": "t:info.show_cookie_preferences", "default": true },
-    { "type": "text", "id": "operator", "label": "t:labels.operator", "info": "t:info.operator", "default": "Provozovatel: [firma], IČO [xxx], [adresa], [e-mail]" }
+    { "type": "text", "id": "operator", "label": "t:labels.operator", "info": "t:info.operator", "default": "Provozovatel: Delina Czechia s.r.o., IČO 11792094, Vítkova 188/22, 186 00 Praha 8" }
   ]
 }
 {% endschema %}
